@@ -9,7 +9,7 @@ SUBTARGET:=KN-3910
 DESCRIPTION:=Challenger
 BOARD_CPPFLAGS += -D__KN_3910__
 DEFAULT_PACKAGES += ndm-mod-interface-extras
-FEATURES += conninfra warp
+FEATURES += conninfra warp usb usbstorage extended_storage
 
 define Target/Description
 	Build firmware images for KN-3910
