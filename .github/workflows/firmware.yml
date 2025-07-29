@@ -1,0 +1,35 @@
+name: Firmware
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "4.03"
+
+jobs:
+  build-firmware:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/appendme/keenetic-sdk:latest
+      options: --user build
+    steps:
+      - name: Pull repo
+        run: |
+          cd /workspace
+          git clone --depth 1 --branch 4.03 https://github.com/Appendme/keenetic-sdk
+
+      - name: Unpack firmware
+        run: |
+          cd /workspace/keenetic-sdk
+          ./unpack.sh firmware/KN-3910_stable_4.03.C.5.0-0_firmware.bin
+
+      - name: Build firmware
+        run: |
+          cd /workspace/keenetic-sdk
+          make -j5 || make -j5 V=s
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: /workspace/keenetic-sdk/bin/
